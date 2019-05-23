@@ -1,0 +1,36 @@
+{
+  "name": "ProjectHuddle Sync",
+  "description": "Sync a Project with your ProjectHudle feedback plugin.",
+  "author": "ProjectHuddle",
+  "homepage": "https://projecthuddle.io",
+  "version": "0.0.1",
+  "compatibleVersion": "55",
+  "$schema": "https://raw.githubusercontent.com/BohemianCoding/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
+  "icon": "icon.png",
+  "commands": [
+    {
+      "name": "⚡Sync Project",
+      "identifier": "projecthuddle.sync",
+      "shortcut": "cmd option s",
+      "script": "./sync.js"
+    },
+    {
+      "name": "Choose Project...",
+      "identifier": "projecthuddle.setup",
+      "script": "./project-setup.js"
+    },
+    {
+      "name": "Connection Settings...",
+      "identifier": "projecthuddle.connection",
+      "script": "./connection.js"
+    }
+  ],
+  "menu": {
+    "title": "ProjectHuddle",
+    "items": [
+      "projecthuddle.sync",
+      "projecthuddle.setup",
+      "projecthuddle.connection"
+    ]
+  }
+}
