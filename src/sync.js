@@ -28,14 +28,6 @@ export default function() {
   }).then(startSync);
 }
 
-export function forEachPromise(items, fn) {
-  return items.reduce(function(promise, item) {
-    return promise.then(function() {
-      return fn(item);
-    });
-  }, Promise.resolve());
-}
-
 export function startSync() {
   // save the document
   sketch.UI.message("Saving document...");
