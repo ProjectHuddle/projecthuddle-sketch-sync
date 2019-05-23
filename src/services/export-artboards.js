@@ -1,6 +1,4 @@
 var sketch = require("sketch/dom");
-var Artboard = require("sketch/dom").Artboard;
-import fs from "@skpm/fs";
 
 export default function() {
   let names = [];
@@ -37,8 +35,4 @@ export function exportableArtboards() {
     });
   });
   return artboards;
-}
-
-export function removeArtboardExports() {
-  fs.rmdirSync("~/Documents/Sketch Exports/projecthuddle");
 }

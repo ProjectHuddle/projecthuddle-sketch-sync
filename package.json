@@ -2,8 +2,12 @@
   "name": "ProjectHuddle",
   "description": "",
   "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajgagnon/projecthuddle-sketch-sync.git"
+  },
   "engines": {
-    "sketch": ">=49.0"
+    "sketch": ">=55.0"
   },
   "skpm": {
     "name": "projecthuddle",

@@ -5,7 +5,7 @@ export default function(options) {
   const FETCH_TIMEOUT = 10000;
   let didTimeOut = false;
 
-  sketch.UI.message("Creating Image...");
+  // sketch.UI.message("Creating Image...");
 
   let url = Settings.settingForKey("ph-site");
   let token = Settings.settingForKey("ph-token");
@@ -50,12 +50,12 @@ export default function(options) {
         // Clear the timeout as cleanup
         clearTimeout(timeout);
         if (!didTimeOut) {
-          console.log("fetch good! ", response);
+          console.log("Image Created! ", response);
           resolve(response);
         }
       })
       .catch(function(err) {
-        console.log("fetch failed! ", err);
+        console.log("Image creation failed! ", err);
         // Rejection already happened with setTimeout
         if (didTimeOut) return;
         // Reject with error

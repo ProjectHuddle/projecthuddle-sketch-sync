@@ -5,7 +5,7 @@ export default function(id = 0, options) {
   const FETCH_TIMEOUT = 10000;
   let didTimeOut = false;
 
-  sketch.UI.message("Syncing Image...");
+  // sketch.UI.message("🔄 Syncing Image...");
 
   let url = Settings.settingForKey("ph-site");
   let token = Settings.settingForKey("ph-token");

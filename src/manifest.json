@@ -9,7 +9,7 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "⚡Sync Project",
+      "name": "Sync Project",
       "identifier": "projecthuddle.sync",
       "shortcut": "cmd option s",
       "script": "./sync.js"

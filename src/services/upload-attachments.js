@@ -1,13 +1,11 @@
 import sketch from "sketch";
 var Settings = require("sketch/settings");
-const FormData = require("sketch-polyfill-fetch/lib/form-data");
-var fs = require("@skpm/fs");
 
 export default function(attachment, options) {
-  const FETCH_TIMEOUT = 10000;
+  const FETCH_TIMEOUT = 30000; // 30 second timeout
   let didTimeOut = false;
 
-  sketch.UI.message("Uploading attachment...");
+  // sketch.UI.message("⤴️ Uploading attachment...");
 
   let url = Settings.settingForKey("ph-site");
   let token = Settings.settingForKey("ph-token");

@@ -122,7 +122,6 @@ export default function(context) {
               `. Please contact support for help.`
           );
         }
-
         console.error(e);
       });
 

@@ -5,7 +5,7 @@ export default function(options) {
   const FETCH_TIMEOUT = 10000;
   let didTimeOut = false;
 
-  sketch.UI.message("⇣ Fetching images...");
+  //   sketch.UI.message("⤵️ Fetching images...");
 
   let url = Settings.settingForKey("ph-site");
   let token = Settings.settingForKey("ph-token");

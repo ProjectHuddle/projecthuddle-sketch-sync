@@ -1,5 +1,6 @@
 import sketch from "sketch";
 var Settings = require("sketch/settings");
+
 import fetchProjects from "./services/fetch-projects";
 
 export default function() {
@@ -12,10 +13,11 @@ export default function() {
     }
   })
     .then(response => {
-      response.json().then(data => {
-        Settings.setSettingForKey("ph-projects", data);
-        projectDialog();
-      });
+      return response.json();
+    })
+    .then(data => {
+      Settings.setSettingForKey("ph-projects", data);
+      projectDialog();
     })
     .catch(e => {
       if (typeof e === "string") {
@@ -70,7 +72,10 @@ export function projectDialog() {
 
   // get stored projects and selected project
   let projects = Settings.settingForKey("ph-projects");
-  let selectedProject = Settings.settingForKey("ph-project");
+  let selectedProject = Settings.documentSettingForKey(
+    context.document,
+    "ph-project"
+  );
 
   // projects chooser dropdown
   y -= 23;
@@ -91,9 +96,12 @@ export function projectDialog() {
     menuItem.setRepresentedObject(value.id);
 
     // if is selected, save index
-    if (value.id == selectedProject.id) {
-      valueIndex = totalIndex;
+    if (selectedProject) {
+      if (value.id == selectedProject.id) {
+        valueIndex = totalIndex;
+      }
     }
+
     menu.addItem(menuItem);
     totalIndex++;
   });
@@ -102,11 +110,13 @@ export function projectDialog() {
   order.setMenu(menu);
   order.selectItemAtIndex(valueIndex);
   container.addSubview(order);
+
   alert.setAccessoryView(container);
 
   if (alert.runModal() === 1000) {
     // save project
-    Settings.setSettingForKey(
+    Settings.setDocumentSettingForKey(
+      context.document,
       "ph-project",
       projects[order.indexOfSelectedItem()]
     );
