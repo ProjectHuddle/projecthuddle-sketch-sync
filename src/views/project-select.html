@@ -3,13 +3,16 @@
 
 <head>
     <link href="../styles.css" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+    <script src="../project-select.js" defer></script>
 </head>
 
-<body class="bg-black antialiased select-none">
-    <div class="w-full pt-12" data-app-region="drag"></div>
-    <div class="container pb-8 mb-4 w-full max-w-xs">
-        <div class="mb-4 px-8" data-app-region="drag">
+<body class="bg-white antialiased select-none">
+    <div id="app">
+        <Sync :selected="selected" :total="total" :loading="loading" :projects="project" :project="project"></Sync>
+    </div>
+    <!-- <div class="container pt-12 pb-8 mb-4 w-full max-w-xs">
+        <div class="mb-4 px-8">
             <label class="block text-gray-700 text-md font-bold mb-2" for="username">
                 Publish 4 Artboards
             </label>
@@ -53,7 +56,7 @@
         <div class="px-8">
             Project Name
         </div>
-    </div>
+    </div> -->
 </body>
 
 </html>

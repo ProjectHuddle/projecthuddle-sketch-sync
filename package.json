@@ -9,6 +9,9 @@
   "engines": {
     "sketch": ">=55.0"
   },
+  "resources": [
+    "src/views/project-select.js"
+  ],
   "skpm": {
     "name": "projecthuddle",
     "manifest": "src/manifest.json",
@@ -27,11 +30,14 @@
   },
   "devDependencies": {
     "@skpm/builder": "^0.7.0",
-    "tailwindcss": "^1.0.2"
+    "tailwindcss": "^1.0.2",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "author": "Andre Gagnon <support@projecthuddle.io>",
   "dependencies": {
     "@skpm/fs": "^0.2.4",
-    "sketch-module-web-view": "^3.0.7"
+    "sketch-module-web-view": "^3.0.7",
+    "vue": "^2.6.10"
   }
 }

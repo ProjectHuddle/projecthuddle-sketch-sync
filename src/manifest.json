@@ -19,6 +19,13 @@
       "identifier": "projecthuddle.view",
       "script": "./view.js"
     },
+
+    {
+      "name": "Select Project",
+      "identifier": "projecthuddle.select",
+      "script": "./views/project-select.js"
+    },
+
     {
       "name": "Choose Project...",
       "identifier": "projecthuddle.setup",
