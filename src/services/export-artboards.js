@@ -1,7 +1,6 @@
 var sketch = require("sketch/dom");
 
 export default function() {
-  let names = [];
   let options = {
     formats: "png",
     scales: "2", //2x scale

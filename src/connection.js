@@ -18,7 +18,7 @@ export default function(context) {
 
   // make alert
   var y = 250;
-  var container = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 200, y));
+  var container = NSView.alloc().initWithFrame(NSMakeRect(0, 0, 300, y));
 
   // site url label
   y -= 32;
@@ -52,7 +52,7 @@ export default function(context) {
   usernameLabel.setDrawsBackground(false);
   usernameLabel.setEditable(false);
   usernameLabel.setSelectable(false);
-  usernameLabel.setStringValue("Username");
+  usernameLabel.setStringValue("API Key");
   container.addSubview(usernameLabel);
 
   // username
@@ -62,7 +62,7 @@ export default function(context) {
   username.setDrawsBackground(true);
   username.setEditable(true);
   username.setSelectable(true);
-  let usernameVal = Settings.settingForKey("ph-username") || "";
+  let usernameVal = Settings.settingForKey("ph-api-key") || "";
   username.setStringValue(usernameVal);
   container.addSubview(username);
   alert.setAccessoryView(container);
@@ -76,7 +76,7 @@ export default function(context) {
   passwordLabel.setDrawsBackground(false);
   passwordLabel.setEditable(false);
   passwordLabel.setSelectable(false);
-  passwordLabel.setStringValue("Password");
+  passwordLabel.setStringValue("API Secret");
   container.addSubview(passwordLabel);
 
   // password
@@ -88,28 +88,25 @@ export default function(context) {
   password.setDrawsBackground(true);
   password.setEditable(true);
   password.setSelectable(true);
-  let passwordVal = Settings.settingForKey("ph-password") || "";
+  let passwordVal = Settings.settingForKey("ph-api-secret") || "";
   password.setStringValue(passwordVal);
   container.addSubview(password);
   alert.setAccessoryView(container);
 
   if (alert.runModal() === 1000) {
     Settings.setSettingForKey("ph-site", websiteURL.stringValue());
-    Settings.setSettingForKey("ph-username", username.stringValue());
-    Settings.setSettingForKey("ph-password", password.stringValue());
+    Settings.setSettingForKey("ph-api-key", username.stringValue());
+    Settings.setSettingForKey("ph-api-secret", password.stringValue());
 
     get_api_token()
       .then(response => {
         sketch.UI.message("🤟🏻Successfully connected!");
         response.json().then(data => {
           // store user data
-          Settings.setSettingForKey("ph-token", data.token);
-          Settings.setSettingForKey(
-            "ph-user-display-name",
-            data.user_display_name
-          );
-          Settings.setSettingForKey("ph-user-email", data.user_email);
-          Settings.setSettingForKey("ph-nicename", data.user_nicename);
+          Settings.setSettingForKey("ph-token", data.access_token);
+          Settings.setSettingForKey("ph-token-exp", data.exp);
+          Settings.setSettingForKey("ph-refresh-token", data.refresh_token);
+          Settings.setSettingForKey("ph-user", data.data.user);
         });
       })
       .catch(e => {

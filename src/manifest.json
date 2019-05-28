@@ -15,6 +15,11 @@
       "script": "./sync.js"
     },
     {
+      "name": "View Project",
+      "identifier": "projecthuddle.view",
+      "script": "./view.js"
+    },
+    {
       "name": "Choose Project...",
       "identifier": "projecthuddle.setup",
       "script": "./project-setup.js"
@@ -29,6 +34,7 @@
     "title": "ProjectHuddle",
     "items": [
       "projecthuddle.sync",
+      "projecthuddle.view",
       "projecthuddle.setup",
       "projecthuddle.connection"
     ]
