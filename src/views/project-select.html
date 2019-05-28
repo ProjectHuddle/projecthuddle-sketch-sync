@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="../styles.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-black antialiased select-none">
+    <div class="w-full pt-12" data-app-region="drag"></div>
+    <div class="container pb-8 mb-4 w-full max-w-xs">
+        <div class="mb-4 px-8" data-app-region="drag">
+            <label class="block text-gray-700 text-md font-bold mb-2" for="username">
+                Publish 4 Artboards
+            </label>
+        </div>
+        <div class="w-full mb-4 px-8">
+            <div class="w-full relative inline-block">
+                <select
+                    class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                    <option>Really long option that will likely overlap the chevron</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                </div>
+            </div>
+        </div>
+        <div class="mb-4 px-8">
+            <label class="block text-gray-500 font-bold">
+                <input class="mr-2 leading-tight" type="radio" name="artboards" checked>
+                <span class="text-sm">
+                    All Arboards On Page
+                </span>
+            </label>
+            <label class="block text-gray-500 font-bold">
+                <input class="mr-2 leading-tight" type="radio" name="artboards">
+                <span class="text-sm">
+                    Only Selected Artboards
+                </span>
+            </label>
+        </div>
+        <div class="mb-4 px-8">
+            <button
+                class="bg-blue w-full hover:shadow-md text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button">
+                Sync
+            </button>
+        </div>
+        <hr class="mb-4 border-t border-solid border-gray-300">
+        <div class="px-8">
+            Project Name
+        </div>
+    </div>
+</body>
+
+</html>
