@@ -15,7 +15,7 @@
       "script": "./sync.js"
     },
     {
-      "name": "View Project",
+      "name": "Sync...",
       "identifier": "projecthuddle.view",
       "script": "./view.js"
     },

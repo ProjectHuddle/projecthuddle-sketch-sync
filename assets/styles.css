@@ -7287,14 +7287,14 @@ video {
   display: inline-block;
   position: relative;
   width: 64px;
-  height: 64px;
+  height: 20px;
 }
 
 .lds-ellipsis div {
   position: absolute;
-  top: 27px;
-  width: 11px;
-  height: 11px;
+  top: 0px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: #ccc;
   background-color: #4a5568;

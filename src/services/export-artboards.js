@@ -1,4 +1,5 @@
 var sketch = require("sketch/dom");
+var Settings = require("sketch/settings");
 
 export default function() {
   let options = {
@@ -24,14 +25,29 @@ export default function() {
 }
 
 export function exportableArtboards() {
-  var artboards = [];
-  context.document.pages().forEach(function(page) {
-    var sortedPageArtboards = MSArtboardOrderSorting.sortArtboardsInDefaultOrder(
-      page.artboards()
-    );
-    sortedPageArtboards.forEach(function(artboard) {
-      artboards.push(artboard);
-    });
+  let type = Settings.documentSettingForKey(context.document, "ph-artboards");
+  if (type === "selected") {
+    return selectedArtboards();
+  } else {
+    return pageArtboards();
+  }
+}
+
+export function selectedArtboards() {
+  var selectedArtboards = [];
+  context.selection.forEach(function(selectedLayer) {
+    if (
+      selectedLayer.isMemberOfClass(MSArtboardGroup) ||
+      selectedLayer.isMemberOfClass(MSSymbolMaster)
+    ) {
+      selectedArtboards.push(selectedLayer);
+    }
   });
-  return artboards;
+  return MSArtboardOrderSorting.sortArtboardsInDefaultOrder(selectedArtboards);
+}
+
+export function pageArtboards() {
+  return MSArtboardOrderSorting.sortArtboardsInDefaultOrder(
+    context.document.currentPage().artboards()
+  );
 }

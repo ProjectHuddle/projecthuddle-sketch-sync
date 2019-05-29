@@ -1,3 +1,6 @@
+import sketch from "sketch";
+var Settings = require("sketch/settings");
+
 import uploadAttachment from "../services/upload-attachments";
 import createImage from "../services/create-image";
 import updateImage from "../services/update-image";
@@ -20,6 +23,8 @@ export default function(item) {
     );
     return;
   }
+
+  sketch.UI.message("fetching");
 
   // find if there is an existing image
   fetchImages({

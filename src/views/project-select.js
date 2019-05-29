@@ -3,7 +3,7 @@ import Sync from "../components/sync.js";
 let args = {
   selected: 0,
   total: 0,
-  //   projects: {},
+  projects: [],
   project: {},
   loading: true
 };
@@ -17,8 +17,19 @@ var vm = new Vue({
 });
 
 window.setData = function(params) {
-  args.selected = params.selected || 0;
-  args.total = params.total || 0;
-  args.project = params.project || {};
-  args.projects = params.projects || [];
+  if (params.selected) {
+    args.selected = params.selected;
+  }
+  if (params.total) {
+    args.total = params.total;
+  }
+  if (params.project) {
+    args.project = params.project;
+  }
+  if (params.projects) {
+    args.projects = params.projects;
+  }
+  if (typeof params.loading !== "undefined") {
+    args.loading = params.loading;
+  }
 };

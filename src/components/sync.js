@@ -36,9 +36,9 @@ export default Vue.component("sync", {
 
       <!-- Title -->
       <div class="mb-4 px-8">
-          <label class="block text-gray-700 text-md font-bold mb-2" for="username">
+          <div class="block text-gray-700 text-md font-bold mb-2">
               Sync {{ artboards }} Artboards
-          </label>
+          </div>
       </div>
       <!-- Title -->
 
@@ -46,9 +46,13 @@ export default Vue.component("sync", {
           <div class="w-full relative inline-block">
                 <select
                     v-model="selectedProject"
-                    class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
-                    <option v-for="project in projects" v-bind:value="project.id">
-                      {{ project.title.rendered }}
+                    class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none">
+                    <option value="0" selected>
+                    Select a Project...
+                    </option>
+                    <option v-for="project in projects" v-bind:value="project.id"
+                    :selected="selectedProject === project.id">
+                      {{ project.title.rendered || 'Untitled Project' }} 
                     </option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -56,7 +60,7 @@ export default Vue.component("sync", {
                         <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                 </div>
           </div>
-          <div v-if="loading">
+          <div v-if="loading" class="absolute bottom-0 right-0 left-0 flex justify-center items-center">
             <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
           </div>
       </div>
@@ -77,28 +81,53 @@ export default Vue.component("sync", {
       <div class="mb-4 px-8">
           <button
               @click="sync"
-              class="bg-blue w-full hover:shadow-md text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              type="button">
-              Sync
+              class="w-full text-white font-bold py-2 px-4 mb-2 rounded focus:outline-none focus:shadow-outline"
+              v-bind:class="{ 
+                'bg-blue hover:shadow-md': artboards, 
+                'bg-gray-400 cursor-not-allowed': !artboards
+              }"
+              type="button"
+              :disabled="!artboards">
+              <template v-if="artboards">
+                Sync
+              </template>
+              <template v-else>
+                No Artboards to Sync
+              </template>
           </button>
       </div>
-      <template v-if="project && project.id">
+      <template>
         <hr class="mb-4 border-t border-solid border-gray-300">
-        <div class="px-8">
-            {{project.title.rendered}}
+        <div class="px-8 flex justify-between items-center">
+          <div class="w-2/3 truncate">
+            <div class="text-gray-500 text-xs">Project</div>
+            <div class="text-gray-700 text-md font-bold truncate">
+              {{project.title.rendered || 'Untitled Project'}}
+            </div>
+          </div>
+          <div class="w-1/3 text-right">
+            <button @click="navigate" class="bg-transparent text-gray-600 font-bold text-xs py-2 px-3 rounded border border-gray-500 focus:shadow-outline">
+                View
+            </button>
+          </div>
         </div>
       </template>
   </div>
 </div>
   `,
 
-  mounted() {
-    console.log(this.projects);
+  computed: {
+    artboards() {
+      return this.exportOption === "all" ? this.total : this.selected;
+    }
   },
 
-  computed: {
-    artboards(old, newVal) {
-      return this.exportOption === "all" ? this.total : this.selected;
+  watch: {
+    project() {
+      this.selectedProject = this.project && this.project.id;
+    },
+    selectedProject() {
+      this.project = this.projects.find(x => x.id === this.selectedProject);
     }
   },
 
@@ -109,8 +138,11 @@ export default Vue.component("sync", {
     sync() {
       window.postMessage("ph-sync", {
         artboards: this.exportOption,
-        project: 0
+        project: this.project
       });
+    },
+    navigate() {
+      window.postMessage("ph-navigate", this.project.link);
     }
   }
 });

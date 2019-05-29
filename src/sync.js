@@ -4,8 +4,6 @@ import sketch from "sketch";
 import syncArtboard from "./functions/syncArtboard";
 import exportArtboards from "./services/export-artboards";
 import fetchRequest from "./services/base/request";
-
-import { confirmation } from "./utility/utility";
 let site = Settings.settingForKey("ph-site");
 
 export default function() {
@@ -27,16 +25,7 @@ export default function() {
     return;
   }
 
-  confirmation({
-    title: "Are you sure?",
-    text:
-      "This will sync the current sketch file with '" +
-      project.title.rendered +
-      "' on " +
-      site +
-      ".",
-    confirmText: "Sync"
-  }).then(sync);
+  sync();
 }
 
 export function sync() {
