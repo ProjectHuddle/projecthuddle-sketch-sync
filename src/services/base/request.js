@@ -1,7 +1,7 @@
 var Settings = require("sketch/settings");
 let didTimeOut = false;
 
-export default function(options, fetchTimeout = 5000) {
+export default function(options, fetchTimeout = 10000) {
   let url = Settings.settingForKey("ph-site");
   let token = Settings.settingForKey("ph-token");
   url = url.replace(/\/?$/, "/");

@@ -4,10 +4,12 @@ import get_api_token from "./services/api-token";
 
 export default function(context) {
   var alert = NSAlert.alloc().init();
-  var iconImage = NSImage.alloc().initByReferencingFile(
-    context.plugin.urlForResourceNamed("icon.png").path()
-  );
-  alert.setIcon(iconImage);
+  if (context && context.plugin) {
+    var iconImage = NSImage.alloc().initByReferencingFile(
+      context.plugin.urlForResourceNamed("icon.png").path()
+    );
+    alert.setIcon(iconImage);
+  }
 
   // title
   alert.setMessageText("Install Information");

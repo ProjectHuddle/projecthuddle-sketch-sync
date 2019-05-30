@@ -52,7 +52,7 @@ export default Vue.component("sync", {
                     </option>
                     <option v-for="project in projects" v-bind:value="project.id"
                     :selected="selectedProject === project.id">
-                      {{ project.title.rendered || 'Untitled Project' }} 
+                      {{ project.title && project.title.rendered ? project.title.rendered : 'Untitled Project' }} 
                     </option>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
@@ -83,11 +83,11 @@ export default Vue.component("sync", {
               @click="sync"
               class="w-full text-white font-bold py-2 px-4 mb-2 rounded focus:outline-none focus:shadow-outline"
               v-bind:class="{ 
-                'bg-blue hover:shadow-md': artboards, 
-                'bg-gray-400 cursor-not-allowed': !artboards
+                'bg-blue hover:shadow-md': canSync, 
+                'bg-gray-400 cursor-not-allowed': !canSync
               }"
               type="button"
-              :disabled="!artboards">
+              :disabled="!canSync">
               <template v-if="artboards">
                 Sync
               </template>
@@ -102,7 +102,7 @@ export default Vue.component("sync", {
           <div class="w-2/3 truncate">
             <div class="text-gray-500 text-xs">Project</div>
             <div class="text-gray-700 text-md font-bold truncate">
-              {{project.title.rendered || 'Untitled Project'}}
+              {{project.title && project.title.rendered ? project.title.rendered : 'Untitled Project'}}
             </div>
           </div>
           <div class="w-1/3 text-right">
@@ -119,6 +119,9 @@ export default Vue.component("sync", {
   computed: {
     artboards() {
       return this.exportOption === "all" ? this.total : this.selected;
+    },
+    canSync() {
+      return this.artboards && this.selectedProject;
     }
   },
 

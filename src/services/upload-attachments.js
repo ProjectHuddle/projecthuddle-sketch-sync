@@ -16,7 +16,7 @@ export default function(attachment, options) {
         "Content-Disposition": `attachment; filename=${filename}.png`
       },
       endpoint: "/wp-json/projecthuddle/v2/media",
-      body: { api_key: api_key, api_secret: api_secret },
+      body: attachment,
       params: options && options.params
     },
     30000 // 30 second timeout

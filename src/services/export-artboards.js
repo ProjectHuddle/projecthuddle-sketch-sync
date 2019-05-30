@@ -9,6 +9,7 @@ export default function() {
     overwriting: true,
     output: false
   };
+
   var artboards = exportableArtboards();
 
   // prepare an array of export objects
@@ -16,7 +17,7 @@ export default function() {
   var details = [];
   artboards.map(item => {
     details.push({
-      artboard: sketch.fromNative(item),
+      artboard: item,
       file: sketch.export(item, options)
     });
   });
@@ -24,6 +25,7 @@ export default function() {
   return details;
 }
 
+// get exportable artboards
 export function exportableArtboards() {
   let type = Settings.documentSettingForKey(context.document, "ph-artboards");
   if (type === "selected") {
@@ -33,8 +35,10 @@ export function exportableArtboards() {
   }
 }
 
+// get selected artboards
 export function selectedArtboards() {
   var selectedArtboards = [];
+  var artboards = [];
   context.selection.forEach(function(selectedLayer) {
     if (
       selectedLayer.isMemberOfClass(MSArtboardGroup) ||
@@ -43,11 +47,26 @@ export function selectedArtboards() {
       selectedArtboards.push(selectedLayer);
     }
   });
-  return MSArtboardOrderSorting.sortArtboardsInDefaultOrder(selectedArtboards);
+  var sortedPageArtboards = MSArtboardOrderSorting.sortArtboardsInDefaultOrder(
+    selectedArtboards
+  );
+
+  // convert to plain array
+  sortedPageArtboards.forEach(function(artboard) {
+    artboards.push(artboard);
+  });
+  return artboards;
 }
 
+// get all artboard on current page
 export function pageArtboards() {
-  return MSArtboardOrderSorting.sortArtboardsInDefaultOrder(
+  var artboards = [];
+  var sortedPageArtboards = MSArtboardOrderSorting.sortArtboardsInDefaultOrder(
     context.document.currentPage().artboards()
   );
+  // convert to plain array
+  sortedPageArtboards.forEach(function(artboard) {
+    artboards.push(artboard);
+  });
+  return artboards;
 }
