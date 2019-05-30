@@ -10,7 +10,8 @@
     "sketch": ">=55.0"
   },
   "resources": [
-    "src/views/project-select.js"
+    "src/views/project-select.js",
+    "src/views/loading.js"
   ],
   "skpm": {
     "name": "projecthuddle",
