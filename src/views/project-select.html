@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link href="../styles.css" rel="stylesheet">
+    <script src="../vue.min.js"></script>
+    <script src="../project-select.js" defer></script>
+</head>
+
+<body class="bg-white antialiased select-none">
+    <div id="app">
+        <Sync :selected="selected" :total="total" :loading="loading" :projects="projects" :project="project"></Sync>
+    </div>
+</body>
+
+</html>

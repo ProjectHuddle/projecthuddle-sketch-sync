@@ -9,20 +9,15 @@
   "icon": "icon.png",
   "commands": [
     {
-      "name": "Sync Project",
+      "name": "Sync...",
       "identifier": "projecthuddle.sync",
-      "shortcut": "cmd option s",
+      "shortcut": "cmd p s",
       "script": "./sync.js"
     },
     {
       "name": "View Project",
       "identifier": "projecthuddle.view",
       "script": "./view.js"
-    },
-    {
-      "name": "Choose Project...",
-      "identifier": "projecthuddle.setup",
-      "script": "./project-setup.js"
     },
     {
       "name": "Connection Settings...",
@@ -35,7 +30,6 @@
     "items": [
       "projecthuddle.sync",
       "projecthuddle.view",
-      "projecthuddle.setup",
       "projecthuddle.connection"
     ]
   }

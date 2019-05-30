@@ -9,6 +9,10 @@
   "engines": {
     "sketch": ">=55.0"
   },
+  "resources": [
+    "src/views/project-select.js",
+    "src/views/loading.js"
+  ],
   "skpm": {
     "name": "projecthuddle",
     "manifest": "src/manifest.json",
@@ -21,14 +25,20 @@
   "scripts": {
     "build": "skpm-build",
     "watch": "skpm-build --watch",
+    "styles": "npx tailwind build ./src/styles/styles.css -o ./assets/styles.css",
     "start": "skpm-build --watch --run",
     "postinstall": "npm run build && skpm-link"
   },
   "devDependencies": {
-    "@skpm/builder": "^0.7.0"
+    "@skpm/builder": "^0.7.0",
+    "tailwindcss": "^1.0.2",
+    "vue-loader": "^15.7.0",
+    "vue-template-compiler": "^2.6.10"
   },
   "author": "Andre Gagnon <support@projecthuddle.io>",
   "dependencies": {
-    "@skpm/fs": "^0.2.4"
+    "@skpm/fs": "^0.2.4",
+    "sketch-module-web-view": "^3.0.7",
+    "vue": "^2.6.10"
   }
 }
