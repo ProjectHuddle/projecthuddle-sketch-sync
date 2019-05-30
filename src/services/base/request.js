@@ -1,10 +1,10 @@
 var Settings = require("sketch/settings");
 let didTimeOut = false;
 
-export default function(options, fetchTimeout = 10000) {
-  let url = Settings.settingForKey("ph-site");
+// 30 second timeout
+export default function doRequest(options, fetchTimeout = 30000) {
+  let url = Settings.settingForKey("ph-site").replace(/\/?$/, "/");
   let token = Settings.settingForKey("ph-token");
-  url = url.replace(/\/?$/, "/");
 
   // defaults
   let atts = {
@@ -45,7 +45,9 @@ export default function(options, fetchTimeout = 10000) {
       didTimeOut = true;
       reject(
         new Error(
-          "Request timed out. Please check to make sure your site is up and REST API Enpoint is publicly accessible."
+          "Request to " +
+            url +
+            " timed out. Please check to make sure your site is up and REST API Enpoint is publicly accessible."
         )
       );
     }, fetchTimeout);
@@ -70,9 +72,36 @@ export default function(options, fetchTimeout = 10000) {
               break;
 
             case 403:
-              reject(
-                "⚠️ Authentication credentials are incorrect. Please double check and try again."
-              );
+              response.json().then(data => {
+                if (
+                  data.code &&
+                  "rest_authentication_token_expired" === data.code
+                ) {
+                  clearTimeout(timeout);
+                  refreshToken()
+                    .then(response => {
+                      console.log("refreshed");
+                      // redo
+                      return doRequest(options)
+                        .then(response => {
+                          resolve(response);
+                        })
+                        .catch(err => {
+                          reject(err);
+                        });
+                    })
+                    .catch(err => {
+                      reject(err);
+                    });
+                } else if (data.message) {
+                  reject(`⚠️ ` + data.message);
+                } else {
+                  reject(
+                    "⚠️ Authentication credentials are incorrect. Please double check and try again."
+                  );
+                }
+              });
+
               break;
 
             case 200:
@@ -84,6 +113,8 @@ export default function(options, fetchTimeout = 10000) {
               response.json().then(data => {
                 if (data.message) {
                   reject(`⚠️ ` + data.message);
+                } else {
+                  reject(data);
                 }
               });
               break;
@@ -96,6 +127,45 @@ export default function(options, fetchTimeout = 10000) {
         if (didTimeOut) return;
         // Reject with error
         reject(err);
+      });
+  });
+}
+
+export function refreshToken(options, timeout) {
+  let siteUrl = Settings.settingForKey("ph-site").replace(/\/?$/, "/");
+
+  return new Promise(function(resolve, reject) {
+    // get refresh token
+    let refresh = Settings.settingForKey("ph-refresh-token");
+
+    // bail if we don't have one
+    if (!refresh) {
+      reject(
+        "⚠️ Authentication credentials are incorrect. Please double check and try again."
+      );
+    }
+
+    fetch(siteUrl + "/wp-json/projecthuddle/v2/token", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      method: "POST",
+      body: {
+        refresh_token: refresh
+      }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        // store user data
+        Settings.setSettingForKey("ph-token", data.access_token);
+        Settings.setSettingForKey("ph-token-exp", data.exp);
+        Settings.setSettingForKey("ph-refresh-token", data.refresh_token);
+        Settings.setSettingForKey("ph-user", data.data.user);
+
+        resolve(data);
       });
   });
 }

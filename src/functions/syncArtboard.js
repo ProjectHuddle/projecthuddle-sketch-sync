@@ -112,17 +112,19 @@ export default function(board, total) {
       return response
         .json()
         .then(data => {
+          let progress = {
+            current: synced,
+            total: total
+          };
+          win.webContents.executeJavaScript(
+            `setData(${JSON.stringify(progress)})`
+          );
+
           if (total === synced) {
             sketch.UI.message("Synced!");
-            win.close();
-          } else {
-            let data = {
-              current: synced,
-              total: total
-            };
-            win.webContents.executeJavaScript(
-              `setData(${JSON.stringify(data)})`
-            );
+            setTimeout(() => {
+              win.close();
+            }, 500);
           }
         })
         .catch(err => {

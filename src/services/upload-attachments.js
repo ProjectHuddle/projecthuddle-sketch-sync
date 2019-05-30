@@ -19,6 +19,6 @@ export default function(attachment, options) {
       body: attachment,
       params: options && options.params
     },
-    30000 // 30 second timeout
+    120000 // 120 second timeout
   );
 }
