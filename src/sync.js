@@ -17,46 +17,8 @@ export default function() {
   let project = Settings.documentSettingForKey(context.document, "ph-project");
   let projects = Settings.settingForKey("ph-projects");
 
-  // start fetching right away
-  fetchProjects({
-    params: {
-      per_page: 100
-    }
-  })
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      Settings.setSettingForKey("ph-projects", data);
-      win.webContents.executeJavaScript(
-        `setData(${JSON.stringify({
-          projects: data,
-          loading: false
-        })})`
-      );
-    })
-    .catch(e => {
-      if (typeof e === "string") {
-        sketch.UI.message(e);
-      } else {
-        win.webContents.executeJavaScript(
-          `setData(${JSON.stringify({
-            loading: false
-          })})`
-        );
-        win.close();
-        sketch.UI.message(
-          `⚠️ Could not connect to ` +
-            Settings.settingForKey("ph-site") +
-            `. Please contact support for help.`
-        );
-      }
-
-      console.error(e);
-    });
-
   // create new browserwindow
-  const win = new BrowserWindow({
+  const syncWindow = new BrowserWindow({
     identifier: "ph-sync",
     width: 300,
     height: 355,
@@ -67,36 +29,77 @@ export default function() {
     // alwaysOnTop: true,
     backgroundColor: "#fff"
   });
-  win.loadURL(require("./views/project-select.html"));
+  syncWindow.loadURL(require("./views/project-select.html"));
 
   let selected = selectedArtboards();
   let total = pageArtboards();
+
   // load data and show
-  win.once("ready-to-show", () => {
+  syncWindow.once("ready-to-show", () => {
     let data = {
       selected: selected.length,
       total: total.length,
       project: project,
-      projects: projects
+      projects: projects,
+      loading: true
     };
-    win.webContents.executeJavaScript(`setData(${JSON.stringify(data)})`);
-    win.show();
+    syncWindow.show();
+    syncWindow.webContents.executeJavaScript(
+      `setSyncData(${JSON.stringify(data)})`
+    );
+
+    // start fetching right away
+    fetchProjects({
+      params: {
+        per_page: 100
+      }
+    })
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        Settings.setSettingForKey("ph-projects", data);
+        syncWindow.webContents.executeJavaScript(
+          `setSyncData(${JSON.stringify({
+            projects: data,
+            loading: false
+          })})`
+        );
+      })
+      .catch(e => {
+        if (typeof e === "string") {
+          sketch.UI.message(e);
+        } else {
+          syncWindow.webContents.executeJavaScript(
+            `setSyncData(${JSON.stringify({
+              loading: false
+            })})`
+          );
+          syncWindow.close();
+          sketch.UI.message(
+            `⚠️ Could not connect to ` +
+              Settings.settingForKey("ph-site") +
+              `. Please contact support for help.`
+          );
+        }
+        console.error(e);
+      });
   });
 
   // allow it to close
-  win.webContents.on("ph-sync-close", () => {
-    win.close();
+  syncWindow.webContents.on("ph-sync-close", () => {
+    syncWindow.close();
   });
 
   // view project
-  win.webContents.on("ph-navigate", url => {
+  syncWindow.webContents.on("ph-navigate", url => {
     NSWorkspace.sharedWorkspace().openURL(NSURL.URLWithString(url));
   });
 
   // sync action
-  win.webContents.on("ph-sync", options => {
+  syncWindow.webContents.on("ph-sync", options => {
     // close window
-    win.close();
+    syncWindow.close();
 
     // save project
     Settings.setDocumentSettingForKey(

@@ -13,7 +13,7 @@ new Vue({
   data: args
 });
 
-window.setData = function(params) {
+window.setSyncData = function(params) {
   if (params.current) {
     args.current = params.current;
   }

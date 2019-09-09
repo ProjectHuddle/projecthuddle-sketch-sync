@@ -3,21 +3,13 @@ export default Vue.component("sync", {
   data() {
     return {
       exportOption: "all",
-      selectedProject: 0
+      selectedProject: 0,
+      selected: 0,
+      total: 0,
+      projects: [],
+      project: {},
+      loading: true
     };
-  },
-
-  // passed props
-  props: {
-    project: {
-      type: Object
-    },
-    projects: {
-      type: Array
-    },
-    selected: 0,
-    total: 0,
-    loading: false
   },
 
   // template file
@@ -50,10 +42,12 @@ export default Vue.component("sync", {
                     <option value="0" selected>
                     Select a Project...
                     </option>
-                    <option v-for="project in projects" v-bind:value="project.id"
-                    :selected="selectedProject === project.id">
-                      {{ project.title && project.title.rendered ? project.title.rendered : 'Untitled Project' }} 
-                    </option>
+                    <template v-if="projects.length">
+                      <option v-for="project in projects" v-bind:value="project.id"
+                      :selected="selectedProject === project.id"> 
+                        {{ project && project.title && project.title.rendered ? project.title.rendered : 'Untitled Project' }} 
+                      </option>
+                    </template>
                 </select>
                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -102,7 +96,7 @@ export default Vue.component("sync", {
           <div class="w-2/3 truncate">
             <div class="text-gray-500 text-xs">Project</div>
             <div class="text-gray-700 text-md font-bold truncate">
-              {{project.title && project.title.rendered ? project.title.rendered : 'Untitled Project'}}
+              {{ project && project.title && project.title.rendered ? project.title.rendered : 'Untitled Project'}}
             </div>
           </div>
           <div class="w-1/3 text-right">
@@ -125,12 +119,31 @@ export default Vue.component("sync", {
     }
   },
 
+  mounted() {
+    window.setSyncData = params => {
+      this.selected =
+        typeof params.selected !== "undefined"
+          ? params.selected
+          : this.selected;
+      this.total =
+        typeof params.total !== "undefined" ? params.total : this.total;
+      this.project =
+        typeof params.project !== "undefined" ? params.project : this.project;
+      this.projects =
+        typeof params.project !== "undefined" ? params.projects : this.projects;
+      this.loading =
+        typeof params.loading !== "undefined" ? params.loading : this.loading;
+    };
+  },
+
   watch: {
     project() {
       this.selectedProject = this.project && this.project.id;
     },
     selectedProject() {
-      this.project = this.projects.find(x => x.id === this.selectedProject);
+      this.project =
+        this.projects.length &&
+        this.projects.find(x => x.id === this.selectedProject);
     }
   },
 
