@@ -60,6 +60,14 @@ export default function doRequest(options, fetchTimeout = 30000) {
 
     fetch(url, payload)
       .then(function(response) {
+        if (response.status !== 200 && response.status !== 201) {
+          reject(
+            "⚠️ Sketch received an invalid response from your server. " +
+              response.status +
+              ": " +
+              response.statusText
+          );
+        }
         // Clear the timeout as cleanup
         clearTimeout(timeout);
         if (!didTimeOut) {

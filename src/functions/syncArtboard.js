@@ -50,7 +50,7 @@ export default function(board, total) {
       current: 0,
       total: total
     };
-    win.webContents.executeJavaScript(`setData(${JSON.stringify(data)})`);
+    win.webContents.executeJavaScript(`setSyncData(${JSON.stringify(data)})`);
     win.show();
   });
 
@@ -100,14 +100,19 @@ export default function(board, total) {
 
         // update if we already have one
         if (image_id) {
-          return updateImage(image_id, syncData);
+          return updateImage(image_id, syncData).catch(err => {
+            console.log(err);
+          });
         }
 
         // create if we don't already have one
-        return createImage(syncData);
+        return createImage(syncData).catch(err => {
+          console.log(err);
+        });
       });
     })
     .then(response => {
+      console.log(response);
       synced++;
       return response
         .json()
@@ -117,7 +122,7 @@ export default function(board, total) {
             total: total
           };
           win.webContents.executeJavaScript(
-            `setData(${JSON.stringify(progress)})`
+            `setSyncData(${JSON.stringify(progress)})`
           );
 
           if (total === synced) {
