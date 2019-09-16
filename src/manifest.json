@@ -3,7 +3,7 @@
   "description": "Sync a Project with your ProjectHudle feedback plugin.",
   "author": "ProjectHuddle",
   "homepage": "https://projecthuddle.io",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "compatibleVersion": "55",
   "$schema": "https://raw.githubusercontent.com/BohemianCoding/SketchAPI/develop/docs/sketch-plugin-manifest-schema.json",
   "icon": "icon.png",
