@@ -130,7 +130,9 @@ export default Vue.component("sync", {
       this.project =
         typeof params.project !== "undefined" ? params.project : this.project;
       this.projects =
-        typeof params.project !== "undefined" ? params.projects : this.projects;
+        typeof params.projects !== "undefined"
+          ? params.projects
+          : this.projects;
       this.loading =
         typeof params.loading !== "undefined" ? params.loading : this.loading;
     };
