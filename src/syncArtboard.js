@@ -2,10 +2,11 @@ import sketch from "sketch";
 var Settings = require("sketch/settings");
 import BrowserWindow from "sketch-module-web-view";
 
-import uploadAttachment from "../services/upload-attachments";
-import createImage from "../services/create-image";
-import updateImage from "../services/update-image";
-import fetchImages from "../services/fetch-images";
+import uploadAttachment from "./services/upload-attachments";
+import createImage from "./services/create-image";
+import updateImage from "./services/update-image";
+import fetchImages from "./services/fetch-images";
+import phMessage from "./persistent-message";
 
 let synced = 0;
 
@@ -29,35 +30,7 @@ export default function(board, total) {
     return;
   }
 
-  // create new browserwindow
-  const win = new BrowserWindow({
-    identifier: "ph-loading",
-    width: 200,
-    height: 40,
-    resizable: false,
-    y: 0,
-    alwaysOnTop: true,
-    show: false,
-    resizable: false,
-    frame: false,
-    vibrancy: "ultra-dark"
-  });
-  win.loadURL(require("../views/loading.html"));
-
-  // load data and show
-  win.once("ready-to-show", () => {
-    let data = {
-      current: 0,
-      total: total
-    };
-    win.webContents.executeJavaScript(`setSyncData(${JSON.stringify(data)})`);
-    win.show();
-  });
-
-  // allow it to close
-  win.webContents.on("ph-loading-close", () => {
-    win.close();
-  });
+  phMessage("Syncing 1 of " + total + "...");
 
   // find if there is an existing image
   fetchImages({
@@ -117,38 +90,32 @@ export default function(board, total) {
       return response
         .json()
         .then(data => {
-          let progress = {
-            current: synced,
-            total: total
-          };
-          win.webContents.executeJavaScript(
-            `setSyncData(${JSON.stringify(progress)})`
-          );
-
           if (total === synced) {
-            sketch.UI.message("Synced!");
-            setTimeout(() => {
-              win.close();
-            }, 500);
+            phMessage("Synced!", true);
+          } else {
+            phMessage("Syncing " + (synced + 1) + " of " + total + "...");
           }
         })
         .catch(err => {
           console.error(err);
-          win.close();
+          if (typeof e === "string") {
+            phMessage(err, true);
+          } else {
+            phMessage("Something went wrong.", true);
+          }
         });
     })
     .catch(e => {
       if (typeof e === "string") {
-        sketch.UI.message(e);
+        phMessage(e, true);
       } else {
-        sketch.UI.message(
+        phMessage(
           `⚠️ Could not connect to ` +
             Settings.settingForKey("ph-site") +
-            `. Please contact support for help.`
+            `. Please contact support for help.`,
+          true
         );
       }
-      win.close();
-
       console.error(e);
     });
 }

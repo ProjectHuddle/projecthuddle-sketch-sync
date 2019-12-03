@@ -2,7 +2,7 @@ var Settings = require("sketch/settings");
 import BrowserWindow from "sketch-module-web-view";
 const sketch = require("sketch");
 import fetchProjects from "./services/fetch-projects";
-import syncProject from "./functions/syncProject";
+import syncProject from "./syncProject";
 import { selectedArtboards, pageArtboards } from "./services/export-artboards";
 import connection from "./connection";
 

@@ -2,8 +2,8 @@
 var Settings = require("sketch/settings");
 import sketch from "sketch";
 import syncArtboard from "./syncArtboard";
-import exportArtboards from "../services/export-artboards";
-import fetchRequest from "../services/base/request";
+import exportArtboards from "./services/export-artboards";
+import fetchRequest from "./services/base/request";
 let site = Settings.settingForKey("ph-site");
 
 export default function() {
@@ -43,9 +43,6 @@ export function sync() {
     return;
   }
 
-  // make sure project is retina
-  sketch.UI.message("Preparing...");
-
   // Force project to retina images
   fetchRequest({
     endpoint: "/wp-json/projecthuddle/v2/mockup/" + project.id,
@@ -56,9 +53,6 @@ export function sync() {
   }).catch(err => {
     console.error(err);
   });
-
-  // start syncing
-  sketch.UI.message("Exporting Artboards...");
 
   // get the artboards
   let artboards = exportArtboards();
