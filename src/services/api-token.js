@@ -8,7 +8,7 @@ export default function() {
   // get token
   return fetchRequest({
     method: "POST",
-    endpoint: "/wp-json/projecthuddle/v2/token",
+    endpoint: "wp-json/projecthuddle/v2/token",
     body: { api_key: api_key, api_secret: api_secret }
   });
 }

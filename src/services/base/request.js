@@ -54,9 +54,12 @@ export default function doRequest(options, fetchTimeout = 30000) {
 
     let payload = {
       headers: atts.headers,
-      method: atts.method,
-      body: atts.body
+      method: atts.method
     };
+
+    if (Object.keys(atts.body).length > 0) {
+      payload.body = atts.body;
+    }
 
     fetch(url, payload)
       .then(function(response) {
@@ -130,7 +133,6 @@ export default function doRequest(options, fetchTimeout = 30000) {
         }
       })
       .catch(function(err) {
-        console.log("fetch failed! ", err);
         // Rejection already happened with setTimeout
         if (didTimeOut) return;
         // Reject with error

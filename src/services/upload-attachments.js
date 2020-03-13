@@ -15,7 +15,7 @@ export default function(attachment, options) {
         "Content-Type": "image/png",
         "Content-Disposition": `attachment; filename=${filename}.png`
       },
-      endpoint: "/wp-json/projecthuddle/v2/media",
+      endpoint: "wp-json/projecthuddle/v2/media",
       body: attachment,
       params: options && options.params
     },
